@@ -4,13 +4,13 @@ module.exports = buildSchema(`
     type User {
         _id: ID!
         email: String!
-        token: String
     }
 
     type Room {
         _id: ID!
         type: Type!
         owner: User!
+        token: String!
         want: RoomDetail
         have: RoomDetail
     }
@@ -38,10 +38,6 @@ module.exports = buildSchema(`
         notifications: String!
     }
 
-    type RootQuery {
-        rooms: [Room!]!
-    }
-
     enum Type {
         WANT
         HAVE
@@ -54,8 +50,14 @@ module.exports = buildSchema(`
         MI
     }
 
+    type RootQuery {
+        rooms: [Room!]!
+        showRoom(token: String!): Room!
+    }
+
     type RootMutation {
-        createRoom(roomInput: RoomInput, userInput: UserInput): Room
+        createRoom(roomInput: RoomInput, userInput: UserInput): Room!
+        deleteRoom(token: String!): Room!
     }
 
     schema {

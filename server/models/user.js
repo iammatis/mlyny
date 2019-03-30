@@ -17,9 +17,6 @@ const userSchema = new Schema({
         default: 'daily',
         required: true
     },
-    token: {
-        type: String
-    },
     room: {
         type: Schema.Types.ObjectId,
         ref: 'Room'

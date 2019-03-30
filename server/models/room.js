@@ -42,6 +42,9 @@ const roomSchema = new Schema({
             }
         }
     },
+    token: {
+        type: String
+    },
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'User'

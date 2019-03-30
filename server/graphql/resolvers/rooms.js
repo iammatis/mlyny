@@ -1,3 +1,4 @@
+const crypto = require('crypto')
 const Room = require('../../models/room')
 const User = require('../../models/user')
 
@@ -23,6 +24,7 @@ module.exports = {
                 type: args.roomInput.type,
                 want: args.roomInput.want,
                 have: args.roomInput.have,
+                token: crypto.randomBytes(64).toString('hex'),
                 owner: createdUser.id
             })
 
@@ -32,6 +34,33 @@ module.exports = {
             return createdRoom
         } catch (err) {
             console.log(err)
+            throw err
+        }
+    },
+
+    showRoom: async args => {
+        try {
+            const room = await Room.findOne({ token: args.token })
+            if (room === null) {
+                throw new Error('There is no room with such token!')
+            }
+            return room
+        } catch (err) {
+            throw err
+        }
+    },
+
+    deleteRoom: async args => {
+        try {
+            const room = await Room.findOneAndDelete({ token: args.token })
+            if (room === null) {
+                throw new Error('There is no room with such token!')
+            }
+
+            await User.findOneAndDelete({ room: room.id })
+
+            return room
+        } catch (err) {
             throw err
         }
     }
