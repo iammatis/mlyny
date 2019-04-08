@@ -1,6 +1,7 @@
 const crypto = require('crypto')
 const Room = require('../../models/room')
 const User = require('../../models/user')
+require('../../models/notification') // Neded for graphql schema
 
 module.exports = {
     rooms: async () => {
