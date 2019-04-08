@@ -11,6 +11,16 @@ module.exports = {
         }
     },
 
+    roomsComplete: async () => {
+        try {
+            return await Room.find()
+                .populate('owner')
+                .populate('notifications')
+        } catch (err) {
+            throw err
+        }
+    },
+
     createRoom: async args => {
         const owner = new User({
             email: args.userInput.email,

@@ -15,6 +15,21 @@ module.exports = buildSchema(`
         have: RoomDetail
     }
 
+    type RoomComplete {
+        _id: ID!
+        type: Type!
+        owner: User!
+        token: String!
+        want: RoomDetail
+        have: RoomDetail
+        notifications: Notification
+    }
+
+    type Notification {
+        matched: [ID!]
+        owns: ID
+    }
+
     type RoomDetail {
         building: Building
         block: String
@@ -53,6 +68,7 @@ module.exports = buildSchema(`
     type RootQuery {
         rooms: [Room!]!
         showRoom(token: String!): Room!
+        roomsComplete: [RoomComplete]
     }
 
     type RootMutation {

@@ -24,7 +24,7 @@ const roomSchema = new Schema({
     have: {
         building: {
             type: String,
-            enum: ['vb', 'ad', 'mi'],
+            enum: ['VB', 'AD', 'MI'],
             required() {
                 return this.type === 'HAVE'
             }
@@ -48,13 +48,17 @@ const roomSchema = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    },
-    notifications: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Notification'
-        }
-    ]
+    }
 })
+
+roomSchema.virtual('notifications', {
+    ref: 'Notification',
+    localField: '_id',
+    foreignField: 'owns',
+    justOne: true
+})
+
+roomSchema.set('toObject', { virtuals: true })
+roomSchema.set('toJSON', { virtuals: true })
 
 module.exports = mongoose.model('Room', roomSchema)
