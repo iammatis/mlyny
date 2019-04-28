@@ -10,5 +10,12 @@ module.exports = {
             fs.readFileSync(`${__dirname}/welcome.ejs`, 'utf8')
         )
         return compiled({ ...msgs.welcome, ...context })
+    },
+
+    daily: context => {
+        const compiled = ejs.compile(
+            fs.readFileSync(`${__dirname}/daily.ejs`, 'utf8')
+        )
+        return compiled({ ...msgs.daily, ...context })
     }
 }

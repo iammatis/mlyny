@@ -1,4 +1,5 @@
 const sgMail = require('@sendgrid/mail')
+const _ = require('lodash')
 const config = require('../../config')
 const templates = require('./templates')
 const utils = require('../../utils')
@@ -24,23 +25,30 @@ module.exports = {
         sgMail.send(msg)
     },
 
-    daily: args => {
-        const emails = [
-            {
-                to: 'recipient1@example.org',
-                from: 'sender@example.org',
-                subject: 'Hello recipient 1',
-                text: 'Hello plain world!',
-                html: '<p>Hello HTML world!</p>'
-            },
-            {
-                to: 'recipient2@example.org',
-                from: 'other-sender@example.org',
-                subject: 'Hello recipient 2',
-                text: 'Hello other plain world!',
-                html: '<p>Hello other HTML world!</p>'
+    daily: matches => {
+        const emails = []
+
+        let msg
+        let html
+        _.forEach(matches, match => {
+            html = templates.daily({
+                type: match.owned.type,
+                room: utils.getRoom(match.owned),
+                matches: utils.concatenateRooms(match.matched),
+                emails: utils.getEmails(match.matched)
+            })
+
+            msg = {
+                // to: match.owned.owner.email,
+                to: 'matej.vilk@gmail.com',
+                from: 'matej.vilk@gmail.com',
+                subject: msgs.daily.subject,
+                html
             }
-        ]
+
+            emails.push(msg)
+        })
+
         sgMail.send(emails)
     }
 }
