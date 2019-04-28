@@ -6,7 +6,7 @@ require('../../models/notification') // Neded for graphql schema
 module.exports = {
     rooms: async () => {
         try {
-            return await Room.find()
+            return await Room.find().populate('owner')
         } catch (err) {
             throw err
         }
