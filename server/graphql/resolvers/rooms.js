@@ -2,6 +2,8 @@ const crypto = require('crypto')
 const Room = require('../../models/room')
 const User = require('../../models/user')
 require('../../models/notification') // Neded for graphql schema
+const mailService = require('../../services/mail')
+const config = require('../../config')
 
 module.exports = {
     rooms: async () => {
@@ -23,12 +25,12 @@ module.exports = {
     },
 
     createRoom: async args => {
-        const owner = new User({
-            email: args.userInput.email,
-            notifications: args.userInput.notifications
-        })
-
         try {
+            const owner = new User({
+                email: args.userInput.email,
+                notifications: args.userInput.notifications
+            })
+
             const createdUser = await owner.save()
 
             const room = new Room({
@@ -41,6 +43,16 @@ module.exports = {
 
             const createdRoom = await room.save()
             await owner.updateOne({ room: createdRoom.id })
+
+            // TODO: to email adress
+            mailService.welcome({
+                to: 'matej.vilk@gmail.com',
+                from: config.mail.from,
+                type: room.type,
+                want: room.want,
+                have: room.have,
+                token: room.token
+            })
 
             return createdRoom
         } catch (err) {
