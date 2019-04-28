@@ -1,0 +1,33 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+
+<body>
+	<div>
+		<h1><%= title %></h1>
+		<span><%= subtitle %></span>
+		<h3>
+			<% switch (type) {
+                case 'HAVE' : %>
+					<%= have %>
+					<% break;
+					
+				case 'WANT' : %>
+					<%= want %>
+					<% break;
+					
+				case 'SWAP' : %>
+					swap
+					<% break;   
+            } %>
+		</h3>
+		<p><%= footer %> <a href="#">sem</a></p>
+	</div>
+</body>
+
+</html>
