@@ -2,9 +2,12 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const graphqlHttp = require('express-graphql')
+const cron = require('node-cron')
+
 const config = require('./config')
 const graphqlSchema = require('./graphql/schema')
 const graphqlResolvers = require('./graphql/resolvers')
+const jobs = require('./utils/cron')
 
 const app = express()
 
@@ -18,6 +21,11 @@ app.use(
         graphiql: true
     })
 )
+
+cron.schedule('* * * * *', () => {
+    console.log('running a task every minute')
+    jobs.daily()
+})
 
 mongoose
     .connect(
